@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JSON API Runner</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <p class="title">JSON API Runner</p>
+      <div class="action-bar">
+        <select class="selector" name="APIs">
+          <option value="">--Please select an API--</option>
+          <option value="getUserProfile">getUserProfile</option>
+          <option value="deleteUserProfile">deleteUserProfile</option>
+          <option value="getImageByName">getImageByName</option>
+          <option value="getFibonacci">getFibonacci</option>
+          <option value="multiplyMatrices">multiplyMatrices</option>
+        </select>
+        <button id="theme-button">Toggle Dark Theme</button>
+        <button>Align Right</button>
+        <button>Run</button>
+      </div>
+      <div>
+        <p class="textarea-title">Selected APIs:</p>
+        <textarea id="textarea"></textarea>
+      </div>
+      <div>
+        <p class="result-title">Result:</p>
+        <pre class="result">
+bhj
+            yu
+            hbj
+        </pre>
+      </div>
+    </div>
+
+    <script src="./main.js"></script>
+  </body>
+</html>
