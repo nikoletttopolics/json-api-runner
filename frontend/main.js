@@ -7,7 +7,7 @@ const runButton = document.getElementById("run-button");
 const textarea = document.getElementById("textarea");
 const result = document.querySelector(".result");
 
-runButton.disabled = true;
+// runButton.disabled = true;
 
 let isDark = false;
 
@@ -113,10 +113,37 @@ apiSelector.addEventListener("change", () => {
     default:
       break;
   }
-  console.log(selectedApis);
+  // console.log(selectedApis);
   textarea.value = JSON.stringify(selectedApis, null, 2);
   runButton.disabled = false;
 });
+
+textarea.value = JSON.stringify(
+  [
+    {
+      service: "userService",
+      endpoint: "getUserProfile",
+      params: { userId: 1 },
+    },
+    {
+      service: "userService",
+      endpoint: "deleteUserProfile",
+      params: { userId: 2 },
+    },
+    {
+      service: "imageService",
+      endpoint: "getImageByName",
+      params: { title: "dog" },
+    },
+    {
+      service: "mathService",
+      endpoint: "getFibonacci",
+      params: { n: 10 },
+    },
+  ],
+  null,
+  2
+);
 
 textarea.addEventListener("input", () => {
   if (textarea.value.trim().length === 0) {
@@ -126,7 +153,22 @@ textarea.addEventListener("input", () => {
   }
 });
 
-runButton.addEventListener("click", () => {
-  const textareaValue = textarea.value;
-  console.log(textareaValue);
+runButton.addEventListener("click", async () => {
+  // a fetch végzi el az api hívást
+  // console.log(textarea.value);
+
+  const response = await fetch("/dispatch", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: textarea.value,
+  });
+  console.log("response", response);
+
+  // a backend json stringként küldi el az adatot, de a frontenden egy js objectet akarok belőle
+  // az await miatt megvárja, amíg ez a folyamat befejeződik, és az eredményt eltárolja a data változóban.
+  // így a data változóban már egy használható js objektum lesz
+  const data = await response.json();
+  console.log("data", data);
+
+  result.textContent = JSON.stringify(data, null, 2);
 });

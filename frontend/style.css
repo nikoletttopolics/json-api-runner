@@ -169,6 +169,7 @@ button {
   margin: 0;
   height: 150px;
   border-radius: 4px;
+  overflow: auto;
 }
 
 .result-dark {
