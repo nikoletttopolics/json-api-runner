@@ -1,3 +1,5 @@
+const log = require("../logger");
+
 let MOCK_USERS = [
   {
     userId: 1,
@@ -29,6 +31,7 @@ const userService = async (payload) => {
       result.push({ getUserProfilesResponse: MOCK_USERS });
     } else {
       result.push({ error: "Unknown endpoint: " + payload[i].endpoint });
+      log(`Unknown endpoint: ${payload[i].endpoint}`, "userService", "error");
     }
   }
 

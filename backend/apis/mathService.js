@@ -1,3 +1,5 @@
+const log = require("../logger");
+
 const mathService = async (payload) => {
   const result = [];
 
@@ -6,6 +8,7 @@ const mathService = async (payload) => {
       result.push(getFibonacci(payload[i].params.n));
     } else {
       result.push({ error: "Unknown endpoint: " + payload[i].endpoint });
+      log(`Unknown endpoint: ${payload[i].endpoint}`, "mathService", "error");
     }
   }
   return result;

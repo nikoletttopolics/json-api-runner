@@ -57,6 +57,14 @@ alignButton.addEventListener("click", () => {
 let selectedApis = [];
 
 apiSelector.addEventListener("change", () => {
+  if (textarea.value) {
+    try {
+      selectedApis = JSON.parse(textarea.value);
+    } catch (error) {
+      alert("wrong JSON format");
+    }
+  }
+
   const selectedValue = apiSelector.value;
   const alreadyExists = selectedApis.some(
     (api) => api.endpoint === selectedValue
@@ -123,6 +131,8 @@ apiSelector.addEventListener("change", () => {
 
 textarea.addEventListener("input", () => {
   if (textarea.value.trim().length === 0) {
+    // ha a textarea tartalma torlodik akkor a selectedapis is uruljon
+    selectedApis = [];
     runButton.disabled = true;
   } else {
     runButton.disabled = false;

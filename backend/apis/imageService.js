@@ -1,3 +1,5 @@
+const log = require("../logger");
+
 let MOCK_IMAGES = [
   {
     id: 1,
@@ -37,6 +39,7 @@ const imageService = async (payload) => {
       result.push({ getImagesResponse: MOCK_IMAGES });
     } else {
       result.push({ error: "Unknown endpoint: " + payload[i].endpoint });
+      log(`Unknown endpoint: ${payload[i].endpoint}`, "imageService", "error");
     }
   }
   return result;
