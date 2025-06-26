@@ -17,15 +17,16 @@ let MOCK_USERS = [
   },
 ];
 
-const result = [];
-// todo: bug reset result state when responses sent
-
 const userService = async (payload) => {
+  const result = [];
+
   for (let i = 0; i < payload.length; i++) {
     if (payload[i].endpoint === "getUserProfile") {
-      getUserProfile(payload[i].params.userId);
+      result.push(getUserProfile(payload[i].params.userId));
     } else if (payload[i].endpoint === "deleteUserProfile") {
-      deleteUserProfile(payload[i].params.userId);
+      result.push(deleteUserProfile(payload[i].params.userId));
+    } else if (payload[i].endpoint === "getUserProfiles") {
+      result.push({ getUserProfilesResponse: MOCK_USERS });
     } else {
       result.push({ error: "Unknown endpoint: " + payload[i].endpoint });
     }
@@ -38,27 +39,26 @@ const getUserProfile = (userId) => {
   const selectedUser = MOCK_USERS.find((user) => user.userId === userId);
 
   if (selectedUser) {
-    result.push({ getUserProfileResponse: selectedUser });
+    return { getUserProfileResponse: selectedUser };
   } else {
-    result.push({
+    return {
       getUserProfileError: `No user found with userId: ${userId}`,
-    });
+    };
   }
 };
 
 const deleteUserProfile = (userId) => {
-  // megnézzük, hogy a userId benne van e az adott blokkban
   const doesUserExist = MOCK_USERS.some((user) => user.userId === userId);
 
   if (doesUserExist) {
     MOCK_USERS = MOCK_USERS.filter((user) => user.userId !== userId);
-    result.push({
+    return {
       deleteUserProfileResponse: `User with userId: ${userId} deleted`,
-    });
+    };
   } else {
-    result.push({
+    return {
       deleteUserProfileError: `No user found with userId: ${userId}`,
-    });
+    };
   }
 };
 

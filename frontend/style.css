@@ -163,7 +163,7 @@ button {
   margin-bottom: 8px;
 }
 
-.result {
+.pre-wrapper {
   border: 1px solid black;
   padding: 8px;
   margin: 0;
@@ -172,7 +172,16 @@ button {
   overflow: auto;
 }
 
-.result-dark {
+.pre-wrapper-dark {
   border-color: rgb(170, 167, 167) !important;
   background-color: rgb(60 60 67);
+}
+
+pre[class*="language-"] {
+  background-color: white !important;
+}
+
+body.body-dark pre [class*="language-"] {
+  border-color: rgb(170, 167, 167) !important;
+  background-color: rgb(60 60 67) !important;
 }

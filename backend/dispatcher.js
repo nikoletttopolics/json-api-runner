@@ -1,4 +1,6 @@
 const userService = require("./apis/userService");
+const imageService = require("./apis/imageService");
+const mathService = require("./apis/mathService");
 
 const dispatch = async (requests) => {
   const userServicePayload = [];
@@ -6,7 +8,6 @@ const dispatch = async (requests) => {
   const mathServicePayload = [];
   const result = [];
 
-  //   itt szedjük szét servicek szerint a requestet
   for (let i = 0; i < requests.length; i++) {
     if (requests[i].service === "userService") {
       userServicePayload.push(requests[i]);
@@ -19,11 +20,13 @@ const dispatch = async (requests) => {
     }
   }
 
-  //   a promis allnak beadjuk a 3 servicet a hozzájuk tartozó payloaddal,
-  //  a 3 service async, amit megvár a a promise all, amikor mindhárom returnöl
-  //  akkor megfut a then
-  return Promise.all([userService(userServicePayload)]).then((values) => {
-    // console.log(JSON.stringify(values));
+  // TODO: ha az adott payload ures, ne legyen service hivas
+  return Promise.all([
+    userService(userServicePayload),
+    imageService(imageServicePayload),
+    mathService(mathServicePayload),
+  ]).then((values) => {
+    console.log(JSON.stringify(values));
     const mergedResults = values.concat(result);
     return mergedResults.flat();
   });
