@@ -5,7 +5,8 @@ const themeButton = document.getElementById("theme-button");
 const alignButton = document.getElementById("align-button");
 const runButton = document.getElementById("run-button");
 const textarea = document.getElementById("textarea");
-const result = document.querySelector(".result");
+const preWrapper = document.querySelector(".pre-wrapper");
+const result = document.getElementById("result");
 
 runButton.disabled = true;
 
@@ -22,7 +23,7 @@ themeButton.addEventListener("click", () => {
     themeButton.classList.add("theme-button-dark");
     alignButton.classList.add("align-button-dark");
     runButton.classList.add("run-button-dark");
-    result.classList.add("result-dark");
+    preWrapper.classList.add("pre-wrapper-dark");
     themeButton.innerText = "Toggle Light Theme";
   } else {
     document.body.classList.remove("body-dark");
@@ -32,7 +33,7 @@ themeButton.addEventListener("click", () => {
     themeButton.classList.remove("theme-button-dark");
     alignButton.classList.remove("align-button-dark");
     runButton.classList.remove("run-button-dark");
-    result.classList.remove("result-dark");
+    preWrapper.classList.remove("pre-wrapper-dark");
     themeButton.innerText = "Toggle Dark Theme";
   }
 
@@ -56,6 +57,14 @@ alignButton.addEventListener("click", () => {
 let selectedApis = [];
 
 apiSelector.addEventListener("change", () => {
+  if (textarea.value) {
+    try {
+      selectedApis = JSON.parse(textarea.value);
+    } catch {
+      alert("Wrong JSON format");
+    }
+  }
+
   const selectedValue = apiSelector.value;
   const alreadyExists = selectedApis.some(
     (api) => api.endpoint === selectedValue
@@ -73,6 +82,12 @@ apiSelector.addEventListener("change", () => {
         params: { userId: 1 },
       });
       break;
+    case "getUserProfiles":
+      selectedApis.push({
+        service: "userService",
+        endpoint: selectedValue,
+      });
+      break;
     case "deleteUserProfile":
       selectedApis.push({
         service: "userService",
@@ -80,11 +95,24 @@ apiSelector.addEventListener("change", () => {
         params: { userId: 2 },
       });
       break;
-    case "getImageByName":
+    case "getImage":
       selectedApis.push({
         service: "imageService",
         endpoint: selectedValue,
-        params: { title: "dog" },
+        params: { id: 1 },
+      });
+      break;
+    case "getImages":
+      selectedApis.push({
+        service: "imageService",
+        endpoint: selectedValue,
+      });
+      break;
+    case "deleteImage":
+      selectedApis.push({
+        service: "imageService",
+        endpoint: selectedValue,
+        params: { id: 2 },
       });
       break;
     case "getFibonacci":
@@ -94,39 +122,39 @@ apiSelector.addEventListener("change", () => {
         params: { n: 10 },
       });
       break;
-    case "multiplyMatrices":
-      selectedApis.push({
-        service: "mathService",
-        endpoint: selectedValue,
-        params: {
-          a: [
-            [1, 2],
-            [3, 4],
-          ],
-          b: [
-            [5, 6],
-            [7, 8],
-          ],
-        },
-      });
-      break;
     default:
       break;
   }
-  console.log(selectedApis);
   textarea.value = JSON.stringify(selectedApis, null, 2);
   runButton.disabled = false;
 });
 
 textarea.addEventListener("input", () => {
   if (textarea.value.trim().length === 0) {
+    // ha a textarea tartalma torlodik akkor a selectedapis is uruljon
+    selectedApis = [];
     runButton.disabled = true;
   } else {
     runButton.disabled = false;
   }
 });
 
-runButton.addEventListener("click", () => {
-  const textareaValue = textarea.value;
-  console.log(textareaValue);
+runButton.addEventListener("click", async () => {
+  try {
+    // ha sikerul a parse, a json valid
+    JSON.parse(textarea.value);
+
+    const response = await fetch("/dispatch", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: textarea.value,
+    });
+
+    const data = await response.json();
+
+    result.textContent = JSON.stringify(data, null, 2);
+    Prism.highlightElement(result);
+  } catch {
+    alert("Wrong JSON format");
+  }
 });
