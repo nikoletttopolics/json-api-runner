@@ -167,7 +167,8 @@ button {
   border: 1px solid black;
   padding: 8px;
   margin: 0;
-  height: 150px;
+  min-height: 150px;
+  max-height: 600px;
   border-radius: 4px;
   overflow: auto;
 }
@@ -181,7 +182,29 @@ pre[class*="language-"] {
   background-color: white !important;
 }
 
-body.body-dark pre [class*="language-"] {
+body.body-dark pre[class*="language-"] {
   border-color: rgb(170, 167, 167) !important;
   background-color: rgb(60 60 67) !important;
+}
+
+body.body-dark {
+  .token {
+    text-shadow: none !important;
+  }
+
+  .token.string {
+    color: #00ffea !important;
+  }
+
+  .token.number {
+    color: #f615f6 !important;
+  }
+
+  .token.property {
+    color: #ffe347 !important;
+  }
+
+  .token.punctuation {
+    color: #fa4242 !important;
+  }
 }
