@@ -60,8 +60,8 @@ apiSelector.addEventListener("change", () => {
   if (textarea.value) {
     try {
       selectedApis = JSON.parse(textarea.value);
-    } catch (error) {
-      alert("wrong JSON format");
+    } catch {
+      alert("Wrong JSON format");
     }
   }
 
@@ -140,14 +140,21 @@ textarea.addEventListener("input", () => {
 });
 
 runButton.addEventListener("click", async () => {
-  const response = await fetch("/dispatch", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: textarea.value,
-  });
+  try {
+    // ha sikerul a parse, a json valid
+    JSON.parse(textarea.value);
 
-  const data = await response.json();
+    const response = await fetch("/dispatch", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: textarea.value,
+    });
 
-  result.textContent = JSON.stringify(data, null, 2);
-  Prism.highlightElement(result);
+    const data = await response.json();
+
+    result.textContent = JSON.stringify(data, null, 2);
+    Prism.highlightElement(result);
+  } catch {
+    alert("Wrong JSON format");
+  }
 });
